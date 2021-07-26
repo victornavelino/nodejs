@@ -18,7 +18,7 @@ const Proyectos = db.define('Proyectos', {
         beforeCreate:(proyecto) => {
             console.log("antes de insertar registro")
             const url = slug(proyecto.nombre).toLowerCase();
-            proyecto.url = `${url}-${shortid.generate()}`;
+            proyecto.url = url;
        }
     }
 });
