@@ -39,32 +39,32 @@ exports.nuevoProyecto = async (req, res) => {
     }
 }
 
-exports.proyectoPorUrl = async (req,res,next) =>{
+exports.proyectoPorUrl = async (req, res, next) => {
     const proyectosPromesa = Proyectos.findAll();
     const proyectoPromesa = Proyectos.findOne({
-        where:{
+        where: {
             url: req.params.url
         }
     })
-    const [proyectos, proyecto] = await Promise.all([proyectosPromesa,proyectoPromesa])
-    if(!proyecto){
+    const [proyectos, proyecto] = await Promise.all([proyectosPromesa, proyectoPromesa])
+    if (!proyecto) {
         next();
     }
-// renderizamos la vista del proyecto seleccionado
-    res.render('tareas',{
+    // renderizamos la vista del proyecto seleccionado
+    res.render('tareas', {
         nombrePagina: 'Tareas del Proyecto',
         proyecto,
         proyectos
     })
 }
-exports.formularioEditar = async(req,res) =>{
+exports.formularioEditar = async (req, res) => {
     const proyectosPromesa = Proyectos.findAll();
     const proyectoPromesa = Proyectos.findOne({
-        where:{
+        where: {
             id: req.params.id
         }
     })
-    const [proyectos, proyecto] = await Promise.all([proyectosPromesa,proyectoPromesa])
+    const [proyectos, proyecto] = await Promise.all([proyectosPromesa, proyectoPromesa])
     res.render('nuevoProyecto', {
         nombrePagina: 'Editar Proyecto',
         proyectos,
@@ -92,10 +92,16 @@ exports.actualizarProyecto = async (req, res) => {
     } else {
         //insertamos registro en BD 
         await Proyectos.update(
-            {nombre: nombre },{
-                where: {id: req.params.id}
-            });
+            { nombre: nombre }, {
+            where: { id: req.params.id }
+        });
         res.redirect('/');
-        
+
     }
+}
+exports.eliminarProyecto = async (req, res, next) => {
+    console.log(req.params);
+    const {urlProyecto} = req.query;
+    const resultado =  await Proyectos.destroy({where: {url: urlProyecto}});
+    res.send("Proyecto Eliminado Correctamente");
 }
