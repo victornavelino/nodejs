@@ -11,14 +11,14 @@ const Proyectos = db.define('Proyectos', {
         primaryKey: true,
         autoIncrement: true
     },
-    nombre: sequelize.STRING,
-    url: sequelize.STRING
+    nombre: sequelize.STRING(100),
+    url: sequelize.STRING(100)
 }, {
     hooks: {
         beforeCreate:(proyecto) => {
             console.log("antes de insertar registro")
             const url = slug(proyecto.nombre).toLowerCase();
-            proyecto.url = url;
+            proyecto.url = `${url}-${shortid.generate()}`;
        }
     }
 });

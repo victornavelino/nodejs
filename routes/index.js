@@ -3,6 +3,7 @@ const router = express.Router();
 //aplicamos express-validator .. todos los metodos check al segmento body
 const {body} = require('express-validator');
 const proyectosController = require('../controllers/proyectosController')
+const tareasController = require('../controllers/tareasController')
 
 
 module.exports = function () {
@@ -21,5 +22,7 @@ module.exports = function () {
 
     //eliminar Proyecto
     router.delete('/proyectos/:url',proyectosController.eliminarProyecto);
+    //agregar tarea
+    router.post('/proyectos/:url',tareasController.agregarTarea);
     return router;
 }

@@ -33,12 +33,12 @@ if (btnEliminar) {
                             }, 1000);
 
                         })
-                        .catch(()=> { 
-                            Swal.fire({
-                                type:'error',
-                                title: 'Hubo un error',
-                                text: 'No se pudo eliminar el proyecto'
-                            })
+                        .catch(() => {
+                            Swal.fire(
+                                'Hubo un error',
+                                'No se pudo eliminar el proyecto',
+                                'error'
+                            )
                         })
 
 
