@@ -1,4 +1,5 @@
 const Proyectos = require('../models/Proyectos');
+const Tareas = require('../models/Tareas');
 const slug = require('slug');
 
 exports.proyectosHome = async (req, res) => {
@@ -47,6 +48,13 @@ exports.proyectoPorUrl = async (req, res, next) => {
         }
     })
     const [proyectos, proyecto] = await Promise.all([proyectosPromesa, proyectoPromesa])
+    //COnsultar tarea de proyecto
+    const tareas = await Tareas.findAll({
+        where: {
+            ProyectoId: proyecto.id
+        }
+    })
+console.log(tareas);
     if (!proyecto) {
         next();
     }
@@ -54,57 +62,58 @@ exports.proyectoPorUrl = async (req, res, next) => {
     res.render('tareas', {
         nombrePagina: 'Tareas del Proyecto',
         proyecto,
-        proyectos
+        proyectos,
+        tareas
     })
 }
 exports.formularioEditar = async (req, res) => {
-    const proyectosPromesa = Proyectos.findAll();
-    const proyectoPromesa = Proyectos.findOne({
-        where: {
-            id: req.params.id
+            const proyectosPromesa = Proyectos.findAll();
+            const proyectoPromesa = Proyectos.findOne({
+                where: {
+                    id: req.params.id
+                }
+            })
+            const [proyectos, proyecto] = await Promise.all([proyectosPromesa, proyectoPromesa])
+            res.render('nuevoProyecto', {
+                nombrePagina: 'Editar Proyecto',
+                proyectos,
+                proyecto
+            });
         }
-    })
-    const [proyectos, proyecto] = await Promise.all([proyectosPromesa, proyectoPromesa])
-    res.render('nuevoProyecto', {
-        nombrePagina: 'Editar Proyecto',
-        proyectos,
-        proyecto
-    });
-}
 
 exports.actualizarProyecto = async (req, res) => {
-    const proyectos = await Proyectos.findAll();
-    //Enviar a la consola lo que el usuario escribe
-    //validar que tenga algo el input
-    const nombre = req.body.nombre;
+            const proyectos = await Proyectos.findAll();
+            //Enviar a la consola lo que el usuario escribe
+            //validar que tenga algo el input
+            const nombre = req.body.nombre;
 
-    let errores = [];
+            let errores = [];
 
-    if (!nombre) {
-        errores.push({ 'texto': 'Agregar un Nombre al proyecto' });
-    }
-    if (errores.length > 0) {
-        res.render('nuevoProyecto', {
-            nombrePagina: 'Nuevo Proyecto',
-            errores,
-            proyectos
-        })
-    } else {
-        //insertamos registro en BD 
-        await Proyectos.update(
-            { nombre: nombre }, {
-            where: { id: req.params.id }
-        });
-        res.redirect('/');
+            if (!nombre) {
+                errores.push({ 'texto': 'Agregar un Nombre al proyecto' });
+            }
+            if (errores.length > 0) {
+                res.render('nuevoProyecto', {
+                    nombrePagina: 'Nuevo Proyecto',
+                    errores,
+                    proyectos
+                })
+            } else {
+                //insertamos registro en BD 
+                await Proyectos.update(
+                    { nombre: nombre }, {
+                    where: { id: req.params.id }
+                });
+                res.redirect('/');
 
-    }
-}
+            }
+        }
 exports.eliminarProyecto = async (req, res, next) => {
-    console.log(req.params);
-    const {urlProyecto} = req.query;
-    const resultado =  await Proyectos.destroy({where: {url: urlProyecto}});
-    if(!resultado){
-        return next();
-    }
-    res.status(200).send("Proyecto Eliminado Correctamente");
-}
+            console.log(req.params);
+            const { urlProyecto } = req.query;
+            const resultado = await Proyectos.destroy({ where: { url: urlProyecto } });
+            if (!resultado) {
+                return next();
+            }
+            res.status(200).send("Proyecto Eliminado Correctamente");
+        }
