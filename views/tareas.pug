@@ -13,6 +13,7 @@ block contenido
 
         .listado-pendientes
             ul
+              if tareas.length
                 each tarea in tareas
                     li.tarea
                         P=tarea.tarea
@@ -21,6 +22,9 @@ block contenido
                                 i.far.fa-check-circle.completo
                             else 
                                 i.far.fa-check-circle
+                            i.fas.fa-trash
+              else 
+                p No hay tareas en este proyecto
 
 
         //TODO - Listado de pendiente
