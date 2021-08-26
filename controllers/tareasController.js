@@ -21,3 +21,6 @@ exports.agregarTarea = async (req, res, next) => {
 
 
 }
+exports.cambiarEstadoTarea = (req, res) => {
+    res.send("TODO OKKKKKK");
+}
