@@ -19,7 +19,7 @@ if (tareas) {
         }
         if (e.target.classList.contains('fa-trash')) {
             const tareaHTML= e.target.parentElement.parentElement;
-            const idTarea
+            const idTarea= tareaHTML.dataset.tarea;
 
             
             console.log(tareaHTML);
