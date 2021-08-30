@@ -9,11 +9,20 @@ if (tareas) {
             const idTarea = icono.parentElement.parentElement.dataset.tarea;
             //redirect hacia tarea:id
             const url = `${location.origin}/tareas/${idTarea}`;
-            
+
             axios.patch(url, { idTarea })
-                .then(function (respuesta) {
-                    console.log(respuesta);
+                .then(respuesta => {
+                    if (respuesta.status === 200) {
+                        icono.classList.toggle('completo');
+                    }
                 })
+        }
+        if (e.target.classList.contains('fa-trash')) {
+            const tareaHTML= e.target.parentElement.parentElement;
+            const idTarea
+
+            
+            console.log(tareaHTML);
         }
 
     })

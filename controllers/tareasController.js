@@ -6,13 +6,13 @@ exports.agregarTarea = async (req, res, next) => {
     //obtenemos el proyecto actual
     const proyecto = await Proyectos.findOne({ where: { url: req.params.url } });
     //leemos tarea
-    const {tarea} =req.body;
+    const { tarea } = req.body;
     //estado 0 imcompleto
-    const estado =0;
-    const ProyectoId =proyecto.id;
+    const estado = 0;
+    const ProyectoId = proyecto.id;
     //insertamos en la base
-    const resultado  = await Tareas.create({tarea,estado,ProyectoId});
-    if(!resultado){
+    const resultado = await Tareas.create({ tarea, estado, ProyectoId });
+    if (!resultado) {
         return next();
     }
     //redireccionar pagina
@@ -21,6 +21,17 @@ exports.agregarTarea = async (req, res, next) => {
 
 
 }
-exports.cambiarEstadoTarea = (req, res) => {
-    res.send("TODO OKKKKKK");
+exports.cambiarEstadoTarea = async (req, res) => {
+    const { id } = req.params;
+    const tarea = await Tareas.findOne({ where: { id: id } })
+    //cambiar el estado tarea
+    //console.log(tarea);
+    let estado = 0;
+    if (tarea.estado === estado) {
+        estado = 1
+    }
+    tarea.estado = estado;
+    const resultado = await tarea.save()
+    if (!resultado) return next();
+    res.status(200).send('Actualizando');
 }
