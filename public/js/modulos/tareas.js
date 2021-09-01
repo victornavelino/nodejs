@@ -36,7 +36,21 @@ if (tareas) {
                     const url = `${location.origin}/tareas/${idTarea}`;
                     axios.delete(url, { params: { idTarea } })
                         .then(respuesta => {
-                            console.log(respuesta);
+                            //eliminar el registro del html
+                            if(respuesta.status===200) {
+                                //elimino el elemento del
+                               tareaHTML.parentElement.removeChild(tareaHTML);
+                               
+                               //mensaje de alerta de eliminacion correcta
+                                Swal.fire(
+                                    'Tarea Eliminada',
+                                     respuesta.data,
+                                     'success'
+                                )
+                               
+                            }
+                            
+
                         });
                 }
             })
