@@ -4,6 +4,7 @@ const router = express.Router();
 const { body } = require('express-validator');
 const proyectosController = require('../controllers/proyectosController')
 const tareasController = require('../controllers/tareasController')
+const usuariosController = require('../controllers/usuariosController')
 
 
 module.exports = function () {
@@ -28,5 +29,8 @@ module.exports = function () {
     router.patch('/tareas/:id', tareasController.cambiarEstadoTarea);
     //Eliminar  tarea
     router.delete('/tareas/:id', tareasController.eliminarTarea);
+    //Crear Cuenta
+    router.get('/crear-cuenta',usuariosController.formCrearCuenta);
+
     return router;
 }
