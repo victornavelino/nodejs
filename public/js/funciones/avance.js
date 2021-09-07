@@ -13,6 +13,7 @@ export const actualizarAvance = () => {
         //mostrar el avance
         const porcentaje =document.querySelector('#porcentaje');
         porcentaje.style.width = avance+'%';
+        //prueba push
     }
 
 
