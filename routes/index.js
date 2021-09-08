@@ -29,8 +29,10 @@ module.exports = function () {
     router.patch('/tareas/:id', tareasController.cambiarEstadoTarea);
     //Eliminar  tarea
     router.delete('/tareas/:id', tareasController.eliminarTarea);
-    //Crear Cuenta
+    //formulario Cuenta
     router.get('/crear-cuenta',usuariosController.formCrearCuenta);
+    //crear cuenta
+    router.post('/crear-cuenta',usuariosController.crearCuenta);
 
     return router;
 }

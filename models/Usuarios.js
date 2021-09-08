@@ -2,7 +2,7 @@ const sequelize = require('sequelize');
 const db = require('../config/db');
 const slug = require('slug');
 const shortid = require('shortid');
-const Proyectos = require('../models/Proyectos');
+const Proyectos = require('./Proyectos');
 
 const Usuarios = db.define('usuarios',{
     id: {
