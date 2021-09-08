@@ -3,6 +3,7 @@ const routes = require('./routes');
 const path = require('path'); // este path es palabra reservada que agrega librerias internas
 const bodyParser =require('body-parser');
 const helpers = require('./helpers'); // helpers con funciones accesibles desde todo el proyecto
+const flash = require('connect-flash');
 
 //Crear la conexion a la base de datos
 const db = require('./config/db');
@@ -25,6 +26,9 @@ app.set('view engine', 'pug');
 
 //Añadir la carpeta de las vistas
 app.set('views', path.join(__dirname,'./views'));
+
+//Agregar FLASH messages
+app.use(flash());
 
 //pasar vardump a la aplicacion
 app.use((req,res,next)=>{

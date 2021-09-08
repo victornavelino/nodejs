@@ -5,26 +5,43 @@ const shortid = require('shortid');
 const Proyectos = require('./Proyectos');
 const bcrypt = require('bcrypt-nodejs');
 
-const Usuarios = db.define('usuarios',{
+const Usuarios = db.define('usuarios', {
     id: {
         type: sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    email:{
+    email: {
         type: sequelize.STRING(60),
-        allowNull: false
+        allowNull: false,
+        validate: {
+            isEmail: {
+                msg: 'Agregar un email valido'
+            },
+            notEmpty: {
+                msg: 'El email no puede estar Vacio'
+            }
+        }, 
+        unique: {
+            args: true,
+            msg: 'Usuario Ya Registrado!'
+        }
 
     },
     password: {
         type: sequelize.STRING(60),
-        allowNull: false
+        allowNull: false,
+        validate: {
+            notEmpty: {
+                msg: 'El password no puede estar Vacio'
+            }
+        }
     }
 }, {
     hooks: {
-        beforeCreate:(usuario) => {
+        beforeCreate: (usuario) => {
             usuario.password = bcrypt.hashSync(usuario.password, bcrypt.genSaltSync(10));
-       }
+        }
     }
 });
 
