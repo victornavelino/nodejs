@@ -37,6 +37,7 @@ app.use((req,res,next)=>{
     res.locals.vardump = helpers.vardump;
     res.locals.anio = 2019;
     res.locals.title= "PROYECTOSOK"
+    res.locals.mensajes = req.flash();
     next();
 });
 
