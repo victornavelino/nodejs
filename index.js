@@ -4,9 +4,12 @@ const path = require('path'); // este path es palabra reservada que agrega libre
 const bodyParser =require('body-parser');
 const helpers = require('./helpers'); // helpers con funciones accesibles desde todo el proyecto
 const flash = require('connect-flash');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 //Crear la conexion a la base de datos
 const db = require('./config/db');
+const { resolveAny } = require('dns');
 
 //Importamos los modelos
 require('./models/Proyectos')
@@ -29,6 +32,15 @@ app.set('views', path.join(__dirname,'./views'));
 
 //Agregar FLASH messages
 app.use(flash());
+
+app.use(cookieParser());
+//Sesiones nos permiten navegar entre distintas paginas sin
+//volvernos a autenticar
+app.use(session({
+    secret: 'supersecreto',
+    resave: false,
+    saveUninitialized: false
+}));
 
 //pasar vardump a la aplicacion
 app.use((req,res,next)=>{
