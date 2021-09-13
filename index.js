@@ -6,6 +6,7 @@ const helpers = require('./helpers'); // helpers con funciones accesibles desde 
 const flash = require('connect-flash');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const passport = require('./config/passport');
 
 //Crear la conexion a la base de datos
 const db = require('./config/db');
@@ -41,6 +42,9 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+app.use(passport.initialize());
+
+app.use(passport.session());
 
 //pasar vardump a la aplicacion
 app.use((req,res,next)=>{
