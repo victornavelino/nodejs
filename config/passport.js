@@ -14,7 +14,7 @@ passport.use(
         },
         async (email, password, done) => {
             try {
-                const usuario = Usuarios.Find({
+                const usuario = Usuarios.findOne({
                     where: { email: email }
                 });
                 //El usuario existe, péro el pass es incorrecto

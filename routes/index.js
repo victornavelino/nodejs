@@ -5,6 +5,7 @@ const { body } = require('express-validator');
 const proyectosController = require('../controllers/proyectosController')
 const tareasController = require('../controllers/tareasController')
 const usuariosController = require('../controllers/usuariosController')
+const authController = require('../controllers/authController')
 
 
 module.exports = function () {
@@ -33,8 +34,10 @@ module.exports = function () {
     router.get('/crear-cuenta',usuariosController.formCrearCuenta);
     //crear cuenta
     router.post('/crear-cuenta',usuariosController.crearCuenta);
-    //iniciar sesion
+    //formulario iniciar sesion
     router.get('/iniciar-sesion',usuariosController.formIniciarSesion);
+    //iniciar sesion
+    router.post('/iniciar-sesion',authController.autenticarUsuario);
 
     return router;
 }
