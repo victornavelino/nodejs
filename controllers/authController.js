@@ -17,3 +17,8 @@ if (req.isAuthenticated()){
 // si no esta autenticado redirigimos al login
  return res.redirect('/iniciar-sesion');
 }
+exports.cerrarSesion = (req, res) =>{
+    req.session.destroy(() =>{
+        res.redirect('/');
+    })
+}
