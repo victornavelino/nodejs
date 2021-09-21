@@ -3,21 +3,24 @@ const Tareas = require('../models/Tareas');
 const slug = require('slug');
 
 exports.proyectosHome = async (req, res) => {
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+    const proyectos = await Proyectos.findAll({where: {usuarioId: usuarioId}});
     res.render('index', {
         nombrePagina: 'Proyectos',
         proyectos
     });
 }
 exports.formularioProyecto = async (req, res) => {
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+    const proyectos = await Proyectos.findAll({where: {usuarioId: usuarioId}});
     res.render('nuevoProyecto', {
         nombrePagina: 'Nuevo Proyecto',
         proyectos
     });
 }
 exports.nuevoProyecto = async (req, res) => {
-    const proyectos = await Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+    const proyectos = await Proyectos.findAll({where: {usuarioId: usuarioId}});
     //Enviar a la consola lo que el usuario escribe
     //validar que tenga algo el input
     const nombre = req.body.nombre;
@@ -35,7 +38,9 @@ exports.nuevoProyecto = async (req, res) => {
         })
     } else {
         //insertamos registro en BD 
-        const proyecto = await Proyectos.create({ nombre });
+
+        const usuarioId = res.locals.usuario.id;
+        const proyecto = await Proyectos.create({ nombre, usuarioId});
         res.redirect('/');
     }
 }

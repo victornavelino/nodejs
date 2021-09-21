@@ -50,10 +50,13 @@ app.use(passport.session());
 app.use((req,res,next)=>{
     //res.locals es reservado, res es de respuesta y locals es para 
     //que este disponible en cualquier parte del codigo, sean vistas o controladores
+    //console.log(req.user);
     res.locals.vardump = helpers.vardump;
     res.locals.anio = 2019;
     res.locals.title= "PROYECTOSOK"
     res.locals.mensajes = req.flash();
+    res.locals.usuario ={...req.user} || null;
+    console.log(res.locals.usuario);
     next();
 });
 
