@@ -4,7 +4,7 @@ const slug = require('slug');
 
 exports.proyectosHome = async (req, res) => {
     const usuarioId = res.locals.usuario.id;
-    const proyectos = await Proyectos.findAll({where: {usuarioId: usuarioId}});
+    const proyectos = await Proyectos.findAll({ where: { usuarioId: usuarioId } });
     res.render('index', {
         nombrePagina: 'Proyectos',
         proyectos
@@ -12,7 +12,7 @@ exports.proyectosHome = async (req, res) => {
 }
 exports.formularioProyecto = async (req, res) => {
     const usuarioId = res.locals.usuario.id;
-    const proyectos = await Proyectos.findAll({where: {usuarioId: usuarioId}});
+    const proyectos = await Proyectos.findAll({ where: { usuarioId: usuarioId } });
     res.render('nuevoProyecto', {
         nombrePagina: 'Nuevo Proyecto',
         proyectos
@@ -20,7 +20,7 @@ exports.formularioProyecto = async (req, res) => {
 }
 exports.nuevoProyecto = async (req, res) => {
     const usuarioId = res.locals.usuario.id;
-    const proyectos = await Proyectos.findAll({where: {usuarioId: usuarioId}});
+    const proyectos = await Proyectos.findAll({ where: { usuarioId: usuarioId } });
     //Enviar a la consola lo que el usuario escribe
     //validar que tenga algo el input
     const nombre = req.body.nombre;
@@ -40,16 +40,18 @@ exports.nuevoProyecto = async (req, res) => {
         //insertamos registro en BD 
 
         const usuarioId = res.locals.usuario.id;
-        const proyecto = await Proyectos.create({ nombre, usuarioId});
+        const proyecto = await Proyectos.create({ nombre, usuarioId });
         res.redirect('/');
     }
 }
 
 exports.proyectoPorUrl = async (req, res, next) => {
-    const proyectosPromesa = Proyectos.findAll();
+    const usuarioId = res.locals.usuario.id;
+    const proyectosPromesa = Proyectos.findAll({ where: { usuarioId: usuarioId } });
     const proyectoPromesa = Proyectos.findOne({
         where: {
-            url: req.params.url
+            url: req.params.url,
+            usuarioId: usuarioId
         }
     })
     const [proyectos, proyecto] = await Promise.all([proyectosPromesa, proyectoPromesa])
@@ -59,7 +61,7 @@ exports.proyectoPorUrl = async (req, res, next) => {
             ProyectoId: proyecto.id
         }
     })
-console.log(tareas);
+    console.log(tareas);
     if (!proyecto) {
         next();
     }
@@ -72,53 +74,56 @@ console.log(tareas);
     })
 }
 exports.formularioEditar = async (req, res) => {
-            const proyectosPromesa = Proyectos.findAll();
-            const proyectoPromesa = Proyectos.findOne({
-                where: {
-                    id: req.params.id
-                }
-            })
-            const [proyectos, proyecto] = await Promise.all([proyectosPromesa, proyectoPromesa])
-            res.render('nuevoProyecto', {
-                nombrePagina: 'Editar Proyecto',
-                proyectos,
-                proyecto
-            });
+    const usuarioId = res.locals.usuario.id;
+    const proyectosPromesa = Proyectos.findAll({ where: { usuarioId: usuarioId } });
+    const proyectoPromesa = Proyectos.findOne({
+        where: {
+            id: req.params.id,
+            usuarioId: usuarioId
         }
+    })
+    const [proyectos, proyecto] = await Promise.all([proyectosPromesa, proyectoPromesa])
+    res.render('nuevoProyecto', {
+        nombrePagina: 'Editar Proyecto',
+        proyectos,
+        proyecto
+    });
+}
 
 exports.actualizarProyecto = async (req, res) => {
-            const proyectos = await Proyectos.findAll();
-            //Enviar a la consola lo que el usuario escribe
-            //validar que tenga algo el input
-            const nombre = req.body.nombre;
+    const usuarioId = res.locals.usuario.id;
+    const proyectos = await Proyectos.findAll({ where: { usuarioId: usuarioId } });
+    //Enviar a la consola lo que el usuario escribe
+    //validar que tenga algo el input
+    const nombre = req.body.nombre;
 
-            let errores = [];
+    let errores = [];
 
-            if (!nombre) {
-                errores.push({ 'texto': 'Agregar un Nombre al proyecto' });
-            }
-            if (errores.length > 0) {
-                res.render('nuevoProyecto', {
-                    nombrePagina: 'Nuevo Proyecto',
-                    errores,
-                    proyectos
-                })
-            } else {
-                //insertamos registro en BD 
-                await Proyectos.update(
-                    { nombre: nombre }, {
-                    where: { id: req.params.id }
-                });
-                res.redirect('/');
+    if (!nombre) {
+        errores.push({ 'texto': 'Agregar un Nombre al proyecto' });
+    }
+    if (errores.length > 0) {
+        res.render('nuevoProyecto', {
+            nombrePagina: 'Nuevo Proyecto',
+            errores,
+            proyectos
+        })
+    } else {
+        //insertamos registro en BD 
+        await Proyectos.update(
+            { nombre: nombre }, {
+            where: { id: req.params.id }
+        });
+        res.redirect('/');
 
-            }
-        }
+    }
+}
 exports.eliminarProyecto = async (req, res, next) => {
-            console.log(req.params);
-            const { urlProyecto } = req.query;
-            const resultado = await Proyectos.destroy({ where: { url: urlProyecto } });
-            if (!resultado) {
-                return next();
-            }
-            res.status(200).send("Proyecto Eliminado Correctamente");
-        }
+    console.log(req.params);
+    const { urlProyecto } = req.query;
+    const resultado = await Proyectos.destroy({ where: { url: urlProyecto } });
+    if (!resultado) {
+        return next();
+    }
+    res.status(200).send("Proyecto Eliminado Correctamente");
+}
